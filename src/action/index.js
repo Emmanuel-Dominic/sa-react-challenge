@@ -39,3 +39,16 @@ export const updateUser = (userId, userData) => {
         });
     };
 };
+
+export const deleteUser = (userId) => {
+    return (dispatch) => {
+        dispatch({ type: 'DELETE_USER_REQUEST' });
+        axios.delete(`${REACT_APP_BASE_URL}/${userId}`)
+        .then((response) => {
+            dispatch({ type: 'DELETE_USER_SUCCESS', userId });
+        })
+        .catch((error) => {
+            dispatch({ type: 'DELETE_USER_ERROR', error: error.response.data.message });
+        });
+    };
+};

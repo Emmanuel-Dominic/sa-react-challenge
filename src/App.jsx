@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchUsers, registerUser, updateUser } from './action/index';
+import { fetchUsers, registerUser, updateUser, deleteUser } from './action/index';
 import UserForm from './components/UserForm';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -37,6 +37,10 @@ function App() {
     const handleEditUser = (user) => {
         setEditUser(user);
         handleShow();
+    };
+
+    const handleDeleteUser = (userId) => {
+        dispatch(deleteUser(userId));
     };
 
     if(loading) return <div>Loading...</div>;
@@ -78,7 +82,7 @@ function App() {
                                 <Button className="btn-sm m-2" variant="primary" onClick={() => handleEditUser(user)}>
                                     Edit
                                 </Button>
-                                <Button className="btn-sm m-2" variant="danger">
+                                <Button className="btn-sm m-2" variant="danger" onClick={() => handleDeleteUser(user.id)}>
                                     Delete
                                 </Button>
                             </td>
