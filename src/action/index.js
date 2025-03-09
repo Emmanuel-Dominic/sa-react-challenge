@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { REACT_APP_BASE_URL } from "../utils/index";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const fetchUsers = () => {
     return (dispatch) => {
@@ -20,6 +22,7 @@ export const registerUser = (userData) => {
       axios.post(REACT_APP_BASE_URL, userData)
         .then((response) => {
             dispatch({ type: 'REGISTER_USER_SUCCESS', user: response.data });
+            toast.success('User registered successfully!');
         })
         .catch((error) => {
             dispatch({ type: 'REGISTER_USER_ERROR', error: error.response.data.message });
@@ -33,6 +36,7 @@ export const updateUser = (userId, userData) => {
       axios.put(`${REACT_APP_BASE_URL}/${userId}`, userData)
         .then((response) => {
             dispatch({ type: 'UPDATE_USER_SUCCESS', user: response.data });
+            toast.success('User updated successfully!');
         })
         .catch((error) => {
             dispatch({ type: 'UPDATE_USER_ERROR', error: error.response.data.message });
@@ -46,6 +50,7 @@ export const deleteUser = (userId) => {
         axios.delete(`${REACT_APP_BASE_URL}/${userId}`)
         .then((response) => {
             dispatch({ type: 'DELETE_USER_SUCCESS', userId });
+            toast.success(response.data.message);
         })
         .catch((error) => {
             dispatch({ type: 'DELETE_USER_ERROR', error: error.response.data.message });

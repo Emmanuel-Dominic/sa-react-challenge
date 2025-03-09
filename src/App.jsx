@@ -4,6 +4,8 @@ import { fetchUsers, registerUser, updateUser, deleteUser } from './action/index
 import UserForm from './components/UserForm';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 
 function App() {
@@ -19,6 +21,12 @@ function App() {
     useEffect(() => {
         dispatch(fetchUsers());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (error && error !== '') {
+            toast.error(error);
+        }
+    }, [error]);
 
     const handleClose = () => {
         setShow(false);
@@ -54,10 +62,10 @@ function App() {
     }, []);
 
     if(loading) return <div>Loading...</div>;
-    if(error) return <div>{error}</div>;
 
     return (
         <div className="App">
+            <ToastContainer />
             <div className="inline-field">
                 <Button className="btn-sm" variant="primary" onClick={handleShow}>
                     Add user
