@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchUsers, registerUser, updateUser, deleteUser } from './action/index';
 import UserForm from './components/UserForm';
@@ -13,6 +13,8 @@ function App() {
     const loading = useSelector((state) => state.loading);
     const error = useSelector((state) => state.error);
     const dispatch = useDispatch();
+    const searchInputRef = useRef(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -43,15 +45,31 @@ function App() {
         dispatch(deleteUser(userId));
     };
 
+    const filteredUsers = useMemo(() => {
+        return users.filter((user) => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    }, [users, searchTerm]);
+
+    const handleSearch = useCallback((event) => {
+        setSearchTerm(event.target.value);
+    }, []);
+
     if(loading) return <div>Loading...</div>;
     if(error) return <div>{error}</div>;
 
     return (
         <div className="App">
-            <Button className="btn-sm" variant="primary" onClick={handleShow}>
-                Add user
-            </Button>
-
+            <div className="inline-field">
+                <Button className="btn-sm" variant="primary" onClick={handleShow}>
+                    Add user
+                </Button>
+                <input
+                        type="search"
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        ref={searchInputRef}
+                        placeholder="Search users..."
+                    />
+            </div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                 <Modal.Title>{editUser ? 'Edit User' : 'Register User'}</Modal.Title>
@@ -72,7 +90,7 @@ function App() {
                         </tr>
                     </thead>
                     <tbody>
-                    { users.length > 0 ? users.map((user, index) => (
+                    { filteredUsers.length > 0 ? filteredUsers.map((user, index) => (
                         <tr key={index}>
                             <td>{index+1}</td>
                             <td>{user.name}</td>

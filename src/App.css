@@ -4,6 +4,11 @@
   padding: 10px;
 }
 
+.inline-field {
+  display: flex;
+  justify-content: space-between;
+}
+
 table { 
   width: 100%; 
   border-collapse: collapse;
