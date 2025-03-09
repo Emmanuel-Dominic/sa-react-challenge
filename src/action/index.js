@@ -26,3 +26,16 @@ export const registerUser = (userData) => {
         });
     };
 };
+
+export const updateUser = (userId, userData) => {
+    return (dispatch) => {
+      dispatch({ type: 'UPDATE_USER_REQUEST' });
+      axios.put(`${REACT_APP_BASE_URL}/${userId}`, userData)
+        .then((response) => {
+            dispatch({ type: 'UPDATE_USER_SUCCESS', user: response.data });
+        })
+        .catch((error) => {
+            dispatch({ type: 'UPDATE_USER_ERROR', error: error.response.data.message });
+        });
+    };
+};

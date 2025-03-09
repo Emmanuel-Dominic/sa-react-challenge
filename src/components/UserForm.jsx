@@ -2,8 +2,8 @@ import React, { useReducer } from 'react';
 import { reducer } from '../reducer/index';
 
 
-const AddUserForm = ({ onAddUser }) => {
-    const [state, dispatch] = useReducer(reducer, { form: {
+const UserForm = ({ onAddUser, onUpdateUser, editUser }) => {
+    const [state, dispatch] = useReducer(reducer, editUser ? { form: editUser } : { form: {
         name: '',
         email: '',
         phone: '',
@@ -11,7 +11,11 @@ const AddUserForm = ({ onAddUser }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onAddUser(state.form);
+        if (editUser) {
+            onUpdateUser(editUser.id, state.form);
+        } else {
+            onAddUser(state.form);
+        }
         dispatch({ type: 'RESET_FORM' });
     };
 
@@ -33,9 +37,9 @@ const AddUserForm = ({ onAddUser }) => {
                 <label htmlFor="name" className="form-label">Phone</label>
                 <input type="text" name="phone" value={state.form.phone} className="form-control" onChange={handleChange} />
             </div>
-            <button type="submit" className="btn btn-sm btn-primary">Submit</button>
+            <button type="submit" className="btn btn-sm btn-primary">{editUser ? 'Update User' : 'Add User'}</button>
         </form>
     );
 };
 
-export default AddUserForm;
+export default UserForm;

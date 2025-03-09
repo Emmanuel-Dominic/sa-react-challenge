@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchUsers, registerUser } from './action/index';
-import AddUserForm from './components/AddUserForm';
+import { fetchUsers, registerUser, updateUser } from './action/index';
+import UserForm from './components/UserForm';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './App.css'
 
 function App() {
     const [show, setShow] = useState(false);
+    const [editUser, setEditUser] = useState(null);
     const users = useSelector((state) => state.users);
     const loading = useSelector((state) => state.loading);
     const error = useSelector((state) => state.error);
@@ -17,12 +18,25 @@ function App() {
         dispatch(fetchUsers());
     }, [dispatch]);
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setShow(false);
+        setEditUser(null);
+    };
     const handleShow = () => setShow(true);
 
     const handleAddUser = (newUser) => {
         dispatch(registerUser(newUser));
         handleClose();
+    };
+
+    const handleUpdateUser = (userId, updatedUser) => {
+        dispatch(updateUser(userId, updatedUser));
+        handleClose();
+    };
+
+    const handleEditUser = (user) => {
+        setEditUser(user);
+        handleShow();
     };
 
     if(loading) return <div>Loading...</div>;
@@ -36,10 +50,10 @@ function App() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                <Modal.Title>{editUser ? 'Edit User' : 'Register User'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AddUserForm onAddUser={handleAddUser} />
+                    <UserForm onAddUser={handleAddUser} onUpdateUser={handleUpdateUser} editUser={editUser} />
                 </Modal.Body>
             </Modal>
             <div>
@@ -61,7 +75,7 @@ function App() {
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
                             <td>
-                                <Button className="btn-sm m-2" variant="primary">
+                                <Button className="btn-sm m-2" variant="primary" onClick={() => handleEditUser(user)}>
                                     Edit
                                 </Button>
                                 <Button className="btn-sm m-2" variant="danger">

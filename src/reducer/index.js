@@ -23,6 +23,13 @@ export const reducer = (state = initialState, action) => {
             return { ...state, users: [...state.users, action.user], loading: false };
         case 'REGISTER_USER_ERROR':
             return { ...state, error: action.error, loading: false };
+        case 'UPDATE_USER_REQUEST':
+            return { ...state, loading: true, error: null };
+        case 'UPDATE_USER_SUCCESS':
+            return {...state, loading: false, error: null, 
+                    users: state.users.map((user) => (user.id === action.user.id ? action.user : user)) };
+        case 'UPDATE_USER_ERROR':
+            return {...state, loading: false, error: action.error };
         case 'UPDATE_FORM':
             return { ...state, form: { ...state.form, [action.field]: action.value } };
         case 'RESET_FORM':
