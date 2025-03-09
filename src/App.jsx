@@ -1,27 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchUsers } from './action/index';
+import Button from './components/Button';
 import './App.css'
-import axios from 'axios'
-import { REACT_APP_BASE_URL } from "./utils/index";
 
 function App() {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    const fetchUsers = async() => {
-        try{
-            const response = await axios.get(REACT_APP_BASE_URL);
-            setUsers(response.data);
-            setLoading(false);
-        }catch(err){
-            setError("Failed to fetch users!");
-            setLoading(false);
-        }
-    }
+    const users = useSelector((state) => state.users);
+    const loading = useSelector((state) => state.loading);
+    const error = useSelector((state) => state.error);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        fetchUsers();
-    }, [])
+        dispatch(fetchUsers());
+    }, [dispatch]);
 
     if(loading) return <div>Loading...</div>;
     if(error) return <div>{error}</div>;
@@ -47,13 +38,13 @@ function App() {
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
                             <td>
-                                <button type="button">Edit</button>
-                                <button type="button">Delete</button>
+                                <Button type="button" text="Edit" />
+                                <Button type="button" text="Delete" />
                             </td>
                         </tr>
                     )) : (
-                        <tr colSpan="5">
-                            <td>
+                        <tr>
+                            <td colSpan="5">
                               <h4>No users found!</h4>
                             </td>
                         </tr>
