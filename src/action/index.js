@@ -13,3 +13,16 @@ export const fetchUsers = () => {
             });
     };
 };
+
+export const registerUser = (userData) => {
+    return (dispatch) => {
+      dispatch({ type: 'REGISTER_USER_REQUEST' });
+      axios.post(REACT_APP_BASE_URL, userData)
+        .then((response) => {
+            dispatch({ type: 'REGISTER_USER_SUCCESS', user: response.data });
+        })
+        .catch((error) => {
+            dispatch({ type: 'REGISTER_USER_ERROR', error: error.response.data.message });
+        });
+    };
+};

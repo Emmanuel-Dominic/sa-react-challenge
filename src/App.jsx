@@ -1,10 +1,13 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchUsers } from './action/index';
-import Button from './components/Button';
+import { fetchUsers, registerUser } from './action/index';
+import AddUserForm from './components/AddUserForm';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import './App.css'
 
 function App() {
+    const [show, setShow] = useState(false);
     const users = useSelector((state) => state.users);
     const loading = useSelector((state) => state.loading);
     const error = useSelector((state) => state.error);
@@ -14,11 +17,31 @@ function App() {
         dispatch(fetchUsers());
     }, [dispatch]);
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleAddUser = (newUser) => {
+        dispatch(registerUser(newUser));
+        handleClose();
+    };
+
     if(loading) return <div>Loading...</div>;
     if(error) return <div>{error}</div>;
 
     return (
         <div className="App">
+            <Button className="btn-sm" variant="primary" onClick={handleShow}>
+                Add user
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <AddUserForm onAddUser={handleAddUser} />
+                </Modal.Body>
+            </Modal>
             <div>
                 <table>
                     <thead>
@@ -38,8 +61,12 @@ function App() {
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
                             <td>
-                                <Button type="button" text="Edit" />
-                                <Button type="button" text="Delete" />
+                                <Button className="btn-sm m-2" variant="primary">
+                                    Edit
+                                </Button>
+                                <Button className="btn-sm m-2" variant="danger">
+                                    Delete
+                                </Button>
                             </td>
                         </tr>
                     )) : (
