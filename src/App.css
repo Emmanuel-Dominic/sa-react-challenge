@@ -1,42 +1,64 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+tr:nth-of-type(odd) { 
+  background: #eee; 
+}
+
+th { 
+  background: #333; 
+  color: white; 
+  font-weight: bold; 
+}
+
+td, th { 
+  padding: 6px; 
+  border: 1px solid #ccc; 
+  text-align: left; 
+}
+
+@media 
+only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+  table, thead, tbody, th, td, tr { 
+      display: block; 
   }
-  to {
-    transform: rotate(360deg);
+
+  thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  tr { border: 1px solid #ccc; }
+
+  td { 
+      border: none;
+      border-bottom: 1px solid #eee; 
+      position: relative;
+      padding-left: 50%; 
   }
-}
 
-.card {
-  padding: 2em;
-}
+  td:before { 
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding-right: 10px; 
+      white-space: nowrap;
+  }
 
-.read-the-docs {
-  color: #888;
+  td:nth-of-type(1):before { content: "No:"; }
+  td:nth-of-type(2):before { content: "Name"; }
+  td:nth-of-type(3):before { content: "Email"; }
+  td:nth-of-type(4):before { content: "Phone"; }
+  td:nth-of-type(5):before { content: "Action"; }
 }
